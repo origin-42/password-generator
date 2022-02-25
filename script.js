@@ -47,7 +47,7 @@ const createPromts = {
     this.numberOfCharsGiven = numOfChars;
     if (this.numberOfCharsGiven < 8 || this.numberOfCharsGiven > 128) {
       do {
-        this.requestNumOfChars();
+        this.numberOfCharsGiven = prompt("Please enter a number ranging from 8 to 128");
       } while (this.numberOfCharsGiven < 8 || this.numberOfCharsGiven > 128);
     }
   },
@@ -84,24 +84,41 @@ const createPromts = {
     }
   }
 }
+// when called, prompts will be run.
+// An array with the number of characters for the password, the criteria selected, and the number to be distributed amonst the criteria
 const runPrompts = () => {
-  createPromts.requestNumOfChars();
-  createPromts.requestLowerCase();
-  createPromts.requestUpperCase();
-  createPromts.requestNumeric();
-  createPromts.requestSpecial();
-}
-runPrompts();
-// Save user input to variables.
-let numberSelected = createPromts.numberOfCharsGiven;
-let lowerCaseSelected = createPromts.confirmedLowerCase;
-let upperCaseSelected = createPromts.confirmedUpperCase;
-let numericSelected = createPromts.confirmedNumeric;
-let specialSelected = createPromts.confirmedSpecial;
+  let criteria = [];
 
-// Variable to create a random index
-let remainder = numberSelected % 4;
-let divisionAllowance = numberSelected / 4;
+  createPromts.requestNumOfChars();
+  criteria.push(createPromts.numberOfCharsGiven);
+  let numberSelected = createPromts.numberOfCharsGiven;
+
+  createPromts.requestLowerCase();
+  criteria.push(createPromts.confirmedLowerCase);
+
+  createPromts.requestUpperCase();
+  criteria.push(createPromts.confirmedUpperCase);
+
+  createPromts.requestNumeric();
+  criteria.push(createPromts.confirmedNumeric);
+
+  createPromts.requestSpecial();
+  criteria.push(createPromts.confirmedSpecial);
+
+  // Math for allowance to add to array.
+  let allowedCriteria = 0;
+  criteria.forEach(item => {
+    if (item === true) {
+      allowedCriteria++
+    }
+  })
+  criteria.push(numberSelected % allowedCriteria);
+  let remainder = numberSelected % allowedCriteria;
+  criteria.push((numberSelected - remainder) / allowedCriteria);
+
+  // Save user input input, division allowance, and remainder to array
+  return criteria;
+}
 
 // Create an array and random value for the password.
 const createRandomIndex = (input) => {
@@ -111,46 +128,66 @@ const createRandomIndex = (input) => {
 let passWordString = [];
 
 // Add criteria allowance to string
-const addLowerCase = () => {
-  let randomLowerCaseIndex = createRandomIndex(charactersArray.length);
-  if (lowerCaseSelected) {
+const addLowerCase = (boolean, remainder, divisionAllowance) => {
+  if (boolean) {
     for (let i = 0; i < divisionAllowance + remainder; i++) {
-      passWordString.push(charactersArray[randomLowerCaseIndex]);
+      passWordString.push(charactersArray[createRandomIndex(charactersArray.length)]);
     }
   }
 }
-const addUpperCase = () => {
-  let randomUpperCaseIndex = createRandomIndex(charactersArray.length);
-  if (upperCaseSelected) {
+const addUpperCase = (boolean, divisionAllowance) => {
+  if (boolean) {
     for (let i = 0; i < divisionAllowance; i++) {
-      passWordString.push(charactersArray[randomUpperCaseIndex].toUpperCase);
+      passWordString.push(charactersArray[createRandomIndex(charactersArray.length)].toUpperCase());
     }
   }
 }
-const addSpecialCharacters = () => {
-  let randomSpecialIndex = createRandomIndex(specialArry.length);
-  if (specialSelected) {
+const addSpecialCharacters = (boolean, divisionAllowance) => {
+  if (boolean) {
     for (let i = 0; i < divisionAllowance; i++) {
-      passWordString.push(specialArry[randomSpecialIndex]);
+      passWordString.push(specialArry[createRandomIndex(specialArry.length)]);
     }
   }
 }
-const addNumericValues = () => {
-  let randomNumberIndex = createRandomIndex(availableNumbers.length);
-  if (numericSelected) {
+const addNumericValues = (boolean, divisionAllowance) => {
+  if (boolean) {
     for (let i = 0; i < divisionAllowance; i++) {
-      passWordString.push(availableNumbers[randomNumberIndex]);
+      passWordString.push(availableNumbers[createRandomIndex(availableNumbers.length)]);
     }
   }
 }
 
+let criteria = runPrompts();
+  // Check criteria and add to array
+  addLowerCase(criteria[1], criteria[5], criteria[6]);
+  addUpperCase(criteria[2], criteria[6]);
+  addSpecialCharacters(criteria[3], criteria[6]);
+  addNumericValues(criteria[4], criteria[6]);
 
-// Create functions for each criteria to add to password array
+  console.log(passWordString);
+
+// Shuffle and present password
 const generatePassword = () => {
+
+  runPrompts();
+  // Check criteria and add to array
+  addLowerCase();
+  addUpperCase();
+  addSpecialCharacters();
+  addNumericValues();
+
+  console.log(passWordString);
+
+  let unshuffled = passWordString;
+  let shuffled = unshuffled
+  // map each element randomly and return a new array
+  .map(value => ({ value, sort: Math.random() }))
+  // relocate each element
+  .sort((a, b) => a.sort - b.sort)
+  .map(({ value }) => value);
   
-  
+  return shuffled;
 }
-generatePassword();
 
 
   // Code to print response generated from selection criteria.
