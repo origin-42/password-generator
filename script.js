@@ -10,33 +10,7 @@ const specialArry = specialCharacters.split("");
 const regularCharacters = "abcdefghijklmnopqrstuvwxyz";
 const charactersArray = regularCharacters.split("");
 
-// Variables to create response to user input as a string.
-const variableCriteria = {
-  // Input is changed to lowercase if it is a string.
-  toLowerCase: function(character) {
-    character = character.toLowerCase();
-    return character;
-  },
-  // Input is changed to an uppercase if it is a string.
-  toUpperCase: function(character) {
-    character = character.toUpperCase();
-    return character;
-  },
-  // Input is changed to a number from the availableNumbers array.
-  createNumber: function(character) {
-    character = availableNumbers[Math.floor(Math.random() * availableNumbers.length - 1)];
-    return character;
-  },
-  // Input is changed to a special character.
-  makeSpecial: function(character) {
-    character = specialArry[Math.floor(Math.random() * specialArry.length - 1)];
-    if (character !== undefined) {
-      return character;
-    } else {
-      return ".";
-    }
-  }
-}
+
 
 // Create several prompts to play when button is pressed to gather user selection criteria.
 const createPromts = {
@@ -57,6 +31,8 @@ const createPromts = {
     let lowerCase = confirm("Include lowercase letters?");
     if (lowerCase) {
       this.confirmedLowerCase = true;
+    } else {
+      this.confirmedLowerCase = false;
     }
   },
   // Changes confirmedUpperCase to true if user presses 'ok'.
@@ -65,6 +41,8 @@ const createPromts = {
     let upperCase = confirm("Include uppercase letters?");
     if (upperCase) {
       this.confirmedUpperCase = true;
+    } else {
+      this.confirmedUpperCase = false;
     }
   },
   // Changes confirmedNumeric to true if user presses 'ok'.
@@ -73,6 +51,8 @@ const createPromts = {
     let numeric = confirm("Include numeric characters?");
     if (numeric) {
       this.confirmedNumeric = true;
+    } else {
+      this.confirmedNumeric = false;
     }
   },
   // Changes confirmedSpecial to true if user presses 'ok'.
@@ -81,6 +61,8 @@ const createPromts = {
     let special = confirm("Include special characters? (#, $, %, etc)");
     if (special) {
       this.confirmedSpecial = true;
+    } else {
+      this.confirmedSpecial = false;
     }
   }
 }
@@ -128,65 +110,65 @@ const createRandomIndex = (input) => {
 let passWordString = [];
 
 // Add criteria allowance to string
-const addLowerCase = (boolean, remainder, divisionAllowance) => {
-  if (boolean) {
+const addLowerCase = (criteriaCheck, remainder, divisionAllowance) => {
+  if (criteriaCheck === true) {
     for (let i = 0; i < divisionAllowance + remainder; i++) {
       passWordString.push(charactersArray[createRandomIndex(charactersArray.length)]);
     }
   }
 }
-const addUpperCase = (boolean, divisionAllowance) => {
-  if (boolean) {
-    for (let i = 0; i < divisionAllowance; i++) {
+const addUpperCase = (lowercaseSelected, criteriaCheck, remainder, divisionAllowance) => {
+  if (lowercaseSelected === true) {
+    remainder = 0;
+  }
+  if (criteriaCheck === true) {
+    for (let i = 0; i < divisionAllowance + remainder; i++) {
       passWordString.push(charactersArray[createRandomIndex(charactersArray.length)].toUpperCase());
     }
   }
 }
-const addSpecialCharacters = (boolean, divisionAllowance) => {
-  if (boolean) {
-    for (let i = 0; i < divisionAllowance; i++) {
-      passWordString.push(specialArry[createRandomIndex(specialArry.length)]);
-    }
+const addNumericValues = (lowercaseSelected, uppercaseSelected, criteriaCheck, remainder, divisionAllowance) => {
+  if (lowercaseSelected === true && uppercaseSelected === true) {
+    remainder = 0;
   }
-}
-const addNumericValues = (boolean, divisionAllowance) => {
-  if (boolean) {
-    for (let i = 0; i < divisionAllowance; i++) {
+  if (criteriaCheck === true) {
+    for (let i = 0; i < divisionAllowance + remainder; i++) {
       passWordString.push(availableNumbers[createRandomIndex(availableNumbers.length)]);
     }
   }
 }
-
-let criteria = runPrompts();
-  // Check criteria and add to array
-  addLowerCase(criteria[1], criteria[5], criteria[6]);
-  addUpperCase(criteria[2], criteria[6]);
-  addSpecialCharacters(criteria[3], criteria[6]);
-  addNumericValues(criteria[4], criteria[6]);
-
-  console.log(passWordString);
+const addSpecialCharacters = (lowercaseSelected, uppercaseSelected, numericSelected, criteriaCheck, remainder, divisionAllowance) => {
+  if (lowercaseSelected === true && uppercaseSelected === true && numericSelected === true) {
+    remainder = 0;
+  }
+  if (criteriaCheck === true) {
+    for (let i = 0; i < divisionAllowance + remainder; i++) {
+      passWordString.push(specialArry[createRandomIndex(specialArry.length)]);
+    }
+  }
+}
 
 // Shuffle and present password
 const generatePassword = () => {
-
-  runPrompts();
+  
+  let criteria = runPrompts();
   // Check criteria and add to array
-  addLowerCase();
-  addUpperCase();
-  addSpecialCharacters();
-  addNumericValues();
-
-  console.log(passWordString);
+  addLowerCase(criteria[1], criteria[5], criteria[6]);
+  addUpperCase(criteria[1], criteria[2], criteria[5], criteria[6]);
+  addNumericValues(criteria[1], criteria[2], criteria[3], criteria[5], criteria[6]);
+  addSpecialCharacters(criteria[1], criteria[2], criteria[3], criteria[4], criteria[5], criteria[6]);
+  console.log(criteria);
 
   let unshuffled = passWordString;
+  passWordString = [];
   let shuffled = unshuffled
   // map each element randomly and return a new array
   .map(value => ({ value, sort: Math.random() }))
-  // relocate each element
+  // relocate each element within array
   .sort((a, b) => a.sort - b.sort)
   .map(({ value }) => value);
   
-  return shuffled;
+  return shuffled.join("");
 }
 
 
