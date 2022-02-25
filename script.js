@@ -25,7 +25,7 @@ const createPromts = {
       } while (this.numberOfCharsGiven < 8 || this.numberOfCharsGiven > 128);
     }
   },
-  // Changes confirmedLowerCase to true if user presses 'ok'.
+  // Changes confirmedLowerCase to true if user presses 'ok', else false.
   confirmedLowerCase: false,
   requestLowerCase: function() {
     let lowerCase = confirm("Include lowercase letters?");
@@ -35,7 +35,7 @@ const createPromts = {
       this.confirmedLowerCase = false;
     }
   },
-  // Changes confirmedUpperCase to true if user presses 'ok'.
+  // Changes confirmedUpperCase to true if user presses 'ok' else false.
   confirmedUpperCase: false,
   requestUpperCase: function() {
     let upperCase = confirm("Include uppercase letters?");
@@ -45,7 +45,7 @@ const createPromts = {
       this.confirmedUpperCase = false;
     }
   },
-  // Changes confirmedNumeric to true if user presses 'ok'.
+  // Changes confirmedNumeric to true if user presses 'ok' else false.
   confirmedNumeric: false,
   requestNumeric: function () {
     let numeric = confirm("Include numeric characters?");
@@ -55,7 +55,7 @@ const createPromts = {
       this.confirmedNumeric = false;
     }
   },
-  // Changes confirmedSpecial to true if user presses 'ok'.
+  // Changes confirmedSpecial to true if user presses 'ok' else false.
   confirmedSpecial: false,
   requestSpecial: function () {
     let special = confirm("Include special characters? (#, $, %, etc)");
@@ -67,7 +67,7 @@ const createPromts = {
   }
 }
 // when called, prompts will be run.
-// An array with the number of characters for the password, the criteria selected, and the number to be distributed amonst the criteria
+// Returns an array with the number of characters for the password, the criteria selected, and the number to be distributed amonst the criteria.
 const runPrompts = () => {
   let criteria = [];
 
@@ -98,7 +98,7 @@ const runPrompts = () => {
   let remainder = numberSelected % allowedCriteria;
   criteria.push((numberSelected - remainder) / allowedCriteria);
 
-  // Save user input input, division allowance, and remainder to array
+  // Save user input, division allowance, and remainder and return as an array.
   return criteria;
 }
 
@@ -111,6 +111,7 @@ let passWordString = [];
 
 // Add criteria allowance to string
 const addLowerCase = (criteriaCheck, remainder, divisionAllowance) => {
+  // criteria selection check
   if (criteriaCheck === true) {
     for (let i = 0; i < divisionAllowance + remainder; i++) {
       passWordString.push(charactersArray[createRandomIndex(charactersArray.length)]);
@@ -118,9 +119,11 @@ const addLowerCase = (criteriaCheck, remainder, divisionAllowance) => {
   }
 }
 const addUpperCase = (lowercaseSelected, criteriaCheck, remainder, divisionAllowance) => {
+  // If does not select lower case criteria, remainder added to uppercase.
   if (lowercaseSelected === true) {
     remainder = 0;
   }
+  // criteria selection check
   if (criteriaCheck === true) {
     for (let i = 0; i < divisionAllowance + remainder; i++) {
       passWordString.push(charactersArray[createRandomIndex(charactersArray.length)].toUpperCase());
@@ -128,9 +131,11 @@ const addUpperCase = (lowercaseSelected, criteriaCheck, remainder, divisionAllow
   }
 }
 const addNumericValues = (lowercaseSelected, uppercaseSelected, criteriaCheck, remainder, divisionAllowance) => {
+  // If does not select lowercase and uppercase criteria, remainder added to numeric.
   if (lowercaseSelected === true && uppercaseSelected === true) {
     remainder = 0;
   }
+  // criteria selection check
   if (criteriaCheck === true) {
     for (let i = 0; i < divisionAllowance + remainder; i++) {
       passWordString.push(availableNumbers[createRandomIndex(availableNumbers.length)]);
@@ -138,9 +143,11 @@ const addNumericValues = (lowercaseSelected, uppercaseSelected, criteriaCheck, r
   }
 }
 const addSpecialCharacters = (lowercaseSelected, uppercaseSelected, numericSelected, criteriaCheck, remainder, divisionAllowance) => {
+  // If user does not select lowercase, uppcase, or numeric, remainder added to special characters.
   if (lowercaseSelected === true && uppercaseSelected === true && numericSelected === true) {
     remainder = 0;
   }
+  // criteria selection check
   if (criteriaCheck === true) {
     for (let i = 0; i < divisionAllowance + remainder; i++) {
       passWordString.push(specialArry[createRandomIndex(specialArry.length)]);
@@ -152,22 +159,23 @@ const addSpecialCharacters = (lowercaseSelected, uppercaseSelected, numericSelec
 const generatePassword = () => {
   
   let criteria = runPrompts();
-  // Check criteria and add to array
+  // Check criteria and add to array in order
   addLowerCase(criteria[1], criteria[5], criteria[6]);
   addUpperCase(criteria[1], criteria[2], criteria[5], criteria[6]);
   addNumericValues(criteria[1], criteria[2], criteria[3], criteria[5], criteria[6]);
   addSpecialCharacters(criteria[1], criteria[2], criteria[3], criteria[4], criteria[5], criteria[6]);
-  console.log(criteria);
 
+  // Create array to shuffle, based off given array.
   let unshuffled = passWordString;
+  // Reset array for next user interaction.
   passWordString = [];
+  // shuffle the array
   let shuffled = unshuffled
-  // map each element randomly and return a new array
   .map(value => ({ value, sort: Math.random() }))
-  // relocate each element within array
   .sort((a, b) => a.sort - b.sort)
   .map(({ value }) => value);
   
+  // Return shuffled array.
   return shuffled.join("");
 }
 
@@ -181,6 +189,7 @@ function writePassword() {
   let password = generatePassword();
   const passwordText = document.querySelector("#password");
 
+  // Change the value of the password selector to the newly generated password.
   passwordText.value = password;
 }
 
@@ -188,3 +197,18 @@ function writePassword() {
 // Awaiting generate button to be clicked to do something.
 generateBtn.addEventListener("click", writePassword);
 
+
+// Function to copy text
+const copyText = () => {
+  /* Get the text field */
+  let copyText = document.getElementById("password");
+
+  /* Select the text field */
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+   /* Copy the text inside the text field */
+  navigator.clipboard.writeText(copyText.value);
+};
+// Copy password to clipboard
+generateBtn.addEventListener("click", copyText);

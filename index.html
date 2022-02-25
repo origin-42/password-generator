@@ -25,6 +25,8 @@
         <article class="card-body">
           <textarea
             readonly
+            tabindex="2"
+            title="Click to copy to clipboard"
             id="password"
             placeholder="Your Secure Password"
             aria-label="Generated Password"
@@ -33,12 +35,12 @@
 
         <!-- Pass Generator Button -->
         <section class="card-footer">
-          <button id="generate" class="btn">Generate Password</button>
+          <button tabindex="1" id="generate" class="btn">Generate Password</button>
         </section>
 
       </article>
     </main>
-    
+
     <script src="script.js"></script>
   </body>
 </html>
