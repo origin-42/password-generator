@@ -158,12 +158,24 @@ const addSpecialCharacters = (lowercaseSelected, uppercaseSelected, numericSelec
 // Shuffle and present password
 const generatePassword = () => {
   
+  // run prompts
   let criteria = runPrompts();
+
+  // Notify visitor if no criteria is selected.
+  let noCriteriaSelected = criteria.filter(function (val) {
+    return val === false;
+  })
+  if (noCriteriaSelected.length === 4) {
+    document.querySelector("#password").setAttribute("placeholder", "You have selected no characters. Please select at least one character type for your password to be generated here."  );
+  }
+
   // Check criteria and add to array in order
   addLowerCase(criteria[1], criteria[5], criteria[6]);
   addUpperCase(criteria[1], criteria[2], criteria[5], criteria[6]);
   addNumericValues(criteria[1], criteria[2], criteria[3], criteria[5], criteria[6]);
   addSpecialCharacters(criteria[1], criteria[2], criteria[3], criteria[4], criteria[5], criteria[6]);
+
+  
 
   // Create array to shuffle, based off given array.
   let unshuffled = passWordString;

@@ -121,18 +121,18 @@ button[disabled] {
 
 @media (max-width: 690px) {
   .btn {
-    font-size: 1rem;
+    font-size: 0.8rem;
     margin: 16px 0px 0px 0px;
     padding: 10px 15px;
   }
 
   #password {
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 }
 
 @media (max-width: 500px) {
-  .btn {
+  .btn, h2 {
     font-size: 0.8rem;
   }
 }
