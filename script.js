@@ -45,6 +45,11 @@ const createPromts = {
   requestNumOfChars: function() {
     let numOfChars = prompt("How many characters should there be? Between 8 and 128");
     this.numberOfCharsGiven = numOfChars;
+    if (this.numberOfCharsGiven < 8 || this.numberOfCharsGiven > 128) {
+      do {
+        this.requestNumOfChars();
+      } while (this.numberOfCharsGiven < 8 || this.numberOfCharsGiven > 128);
+    }
   },
   // Changes confirmedLowerCase to true if user presses 'ok'.
   confirmedLowerCase: false,
@@ -79,21 +84,71 @@ const createPromts = {
     }
   }
 }
-
+const runPrompts = () => {
+  createPromts.requestNumOfChars();
+  createPromts.requestLowerCase();
+  createPromts.requestUpperCase();
+  createPromts.requestNumeric();
+  createPromts.requestSpecial();
+}
+runPrompts();
 // Save user input to variables.
-let numberSelected = createPromts.requestNumOfChars();
-let lowerCaseSelected = createPromts.requestLowerCase();
-let upperCaseSelected = createPromts.requestUpperCase();
-let numericSelected = createPromts.requestNumeric();
-let specialSelected = createPromts.requestSpecial();
+let numberSelected = createPromts.numberOfCharsGiven;
+let lowerCaseSelected = createPromts.confirmedLowerCase;
+let upperCaseSelected = createPromts.confirmedUpperCase;
+let numericSelected = createPromts.confirmedNumeric;
+let specialSelected = createPromts.confirmedSpecial;
 
-const generatePassword = () => {
-  // Create a string * the number selected by user.
-  let generatedString = ;
-  console.log(generatedString);
-  if (lowerCaseSelected && upperCaseSelected && numericSelected && specialSelected) {
+// Variable to create a random index
+let remainder = numberSelected % 4;
+let divisionAllowance = numberSelected / 4;
 
+// Create an array and random value for the password.
+const createRandomIndex = (input) => {
+  let randomIndex = Math.floor(Math.random() * input);
+  return randomIndex;
+}
+let passWordString = [];
+
+// Add criteria allowance to string
+const addLowerCase = () => {
+  let randomLowerCaseIndex = createRandomIndex(charactersArray.length);
+  if (lowerCaseSelected) {
+    for (let i = 0; i < divisionAllowance + remainder; i++) {
+      passWordString.push(charactersArray[randomLowerCaseIndex]);
+    }
   }
+}
+const addUpperCase = () => {
+  let randomUpperCaseIndex = createRandomIndex(charactersArray.length);
+  if (upperCaseSelected) {
+    for (let i = 0; i < divisionAllowance; i++) {
+      passWordString.push(charactersArray[randomUpperCaseIndex].toUpperCase);
+    }
+  }
+}
+const addSpecialCharacters = () => {
+  let randomSpecialIndex = createRandomIndex(specialArry.length);
+  if (specialSelected) {
+    for (let i = 0; i < divisionAllowance; i++) {
+      passWordString.push(specialArry[randomSpecialIndex]);
+    }
+  }
+}
+const addNumericValues = () => {
+  let randomNumberIndex = createRandomIndex(availableNumbers.length);
+  if (numericSelected) {
+    for (let i = 0; i < divisionAllowance; i++) {
+      passWordString.push(availableNumbers[randomNumberIndex]);
+    }
+  }
+}
+
+
+// Create functions for each criteria to add to password array
+const generatePassword = () => {
+  
+  
 }
 generatePassword();
 
