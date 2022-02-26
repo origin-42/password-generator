@@ -19,9 +19,19 @@ const createPromts = {
   requestNumOfChars: function() {
     let numOfChars = prompt("How many characters should there be? Between 8 and 128");
     this.numberOfCharsGiven = numOfChars;
+    // Provide stop condition to user on 'cancel'.
+    if (this.numberOfCharsGiven === null) {
+      return;
+    }
+    // check if selection is valid
     if (this.numberOfCharsGiven < 8 || this.numberOfCharsGiven > 128) {
+      // repeat message until valid
       do {
         this.numberOfCharsGiven = prompt("Please enter a number ranging from 8 to 128");
+        // Provide a stop condition after each repeat on incorrect selection.
+        if (this.numberOfCharsGiven === null) {
+          return;
+        }
       } while (this.numberOfCharsGiven < 8 || this.numberOfCharsGiven > 128);
     }
   },
@@ -74,6 +84,10 @@ const runPrompts = () => {
   createPromts.requestNumOfChars();
   criteria.push(createPromts.numberOfCharsGiven);
   let numberSelected = createPromts.numberOfCharsGiven;
+  // Cancel function is user selects cancel.
+  if (numberSelected === null) {
+    return;
+  }
 
   createPromts.requestLowerCase();
   criteria.push(createPromts.confirmedLowerCase);
