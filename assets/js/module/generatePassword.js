@@ -3,6 +3,7 @@ const createPromts = {
 
   // Request number of characters to use for password and save response to variable.
   numberOfCharsGiven: 0,
+  // Feedback for user selection
   numberConfirmation: `${this.numberOfCharsGiven} + "characters"`,
   requestNumOfChars: function() {
     let numOfChars = prompt("How many characters should there be? Between 8 and 128");
@@ -25,6 +26,7 @@ const createPromts = {
 
   // Check if user wishes to use lowercase characters and save response to variable.
   confirmedLowerCase: false,
+  // Feedback for user selection
   lowercaseConfirmation: undefined,
   requestLowerCase: function() {
     let lowerCase = confirm("Include lowercase letters?");
@@ -38,6 +40,7 @@ const createPromts = {
   },
   // Check if user wishes to use uppercase characters and save response to variable.
   confirmedUpperCase: false,
+  // Feedback for user selection
   uppercaseConfirmation: undefined,
   requestUpperCase: function() {
     let upperCase = confirm("Include uppercase letters?");
@@ -51,6 +54,7 @@ const createPromts = {
   },
   // Check if user wishes to use numeric characters and save response to variable.
   confirmedNumeric: false,
+  // Feedback for user selection
   numericConfirmation: undefined,
   requestNumeric: function () {
     let numeric = confirm("Include numeric characters?");
@@ -64,6 +68,7 @@ const createPromts = {
   },
   // Check if user wishes to use special characters and save response to variable.
   confirmedSpecial: false,
+  // Feedback for user selection
   specialConfirmation: undefined,
   requestSpecial: function () {
     let special = confirm("Include special characters? (#, $, %, etc)");
