@@ -143,7 +143,7 @@ const generatePassword = () => {
   for (let i = 8; i <= 128; i++) {
     availableNumbers.push(i);
   }
-  const specialArry = "/[!@#$%^&*()_+\-=\[\]{};':\"\|,.<>\/?]+/".split("");
+  const specialArry = " !\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~".split("");
   const charactersArray = "abcdefghijklmnopqrstuvwxyz".split("");
 
   // Randomise an input value
