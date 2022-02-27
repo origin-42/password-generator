@@ -1,14 +1,23 @@
 // Function to copy text
 const copyText = () => {
-    /* Get the text field */
-    let copyText = document.getElementById("password");
-  
-    /* Select the text field */
-    copyText.select();
-    copyText.setSelectionRange(0, 99999); /* For mobile devices */
-  
-     /* Copy the text inside the text field */
-    navigator.clipboard.writeText(copyText.value);
-  };
-  // Copy password to clipboard
-  generateBtn.addEventListener("click", copyText);
+
+   /* Copy the text inside the text field */
+  navigator.clipboard.writeText(passwordField.value);
+};
+
+// Function to confirm copy
+const changetext = () => {
+  if (passwordField.value) {
+    copy.innerHTML = "Copied!";
+    setTimeout(() => {
+      copy.innerHTML = "Copy";
+    }, 1500);
+  }
+}
+
+// Document selectors
+const copy = document.getElementById('copy');
+let passwordField = document.getElementById("password");
+// Event listeners
+copy.addEventListener("click", copyText);
+copy.addEventListener("click", changetext);
