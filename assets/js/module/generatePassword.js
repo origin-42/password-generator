@@ -220,7 +220,6 @@ function writePassword() {
   .sort((a, b) => a.sort - b.sort)
   .map(({ value }) => value).join("");
 
-  console.log(shuffledPassword);
   const passwordText = document.querySelector("#password");
   // Change innerHTML of #password to the provided password.
   passwordText.value = shuffledPassword;
