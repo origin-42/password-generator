@@ -29,6 +29,6 @@ Dave Plummer
 
 [Password Generator](https://origin-42.github.io/password-generator/)
 
-[![snippet](./assets/images/Screenshot%202022-02-19%20205804.png)](https://origin-42.github.io/Dave-Plummer-Portfolio/)
+[![snippet](./assets/images/Password%20generator)
 
 Updated as of 27/02/2022.
