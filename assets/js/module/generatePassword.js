@@ -58,6 +58,13 @@ const createPromts = {
   confirmedNumeric: false,
   // Feedback for user selection
   numericConfirmation: undefined,
+  availableNumbers: [],
+  addNumbers: function () {
+    for (let i = 0; i <= 9; i++) {
+      this.availableNumbers.push(i);
+    }
+  },
+  charactersArray: "abcdefghijklmnopqrstuvwxyz".split(""),
   requestNumeric: function () {
     let numeric = confirm("Include numeric characters?");
     if (numeric) {
@@ -140,13 +147,6 @@ const generatePassword = () => {
   // Reset or create a password array to save selected character criteria as a password.
   let passWordArray = [];
 
-  // Create variables to add to password.
-  const availableNumbers = [];
-  for (let i = 0; i <= 9; i++) {
-    availableNumbers.push(i);
-  }
-  const charactersArray = "abcdefghijklmnopqrstuvwxyz".split("");
-
   // Randomise an input value
   const createRandomIndex = (input) => {
     let randomIndex = Math.floor(Math.random() * input);
@@ -158,7 +158,7 @@ const generatePassword = () => {
     const addLowerCase = (criteriaCheck, remainder, divisionAllowance) => {
       if (criteriaCheck === true) {
         for (let i = 0; i < divisionAllowance + remainder; i++) {
-          passWordArray.push(charactersArray[createRandomIndex(charactersArray.length)]);
+          passWordArray.push(createPromts.charactersArray[createRandomIndex(createPromts.charactersArray.length)]);
         }
       }
     }
@@ -171,7 +171,7 @@ const generatePassword = () => {
       }
       if (criteriaCheck === true) {
         for (let i = 0; i < divisionAllowance + remainder; i++) {
-          passWordArray.push(charactersArray[createRandomIndex(charactersArray.length)].toUpperCase());
+          passWordArray.push(createPromts.charactersArray[createRandomIndex(createPromts.charactersArray.length)].toUpperCase());
         }
       }
     }
@@ -183,8 +183,9 @@ const generatePassword = () => {
         remainder = 0;
       }
       if (criteriaCheck === true) {
+        createPromts.addNumbers();
         for (let i = 0; i < divisionAllowance + remainder; i++) {
-          passWordArray.push(availableNumbers[createRandomIndex(availableNumbers.length)]);
+          passWordArray.push(createPromts.availableNumbers[createRandomIndex(createPromts.availableNumbers.length)]);
         }
       }
     }
