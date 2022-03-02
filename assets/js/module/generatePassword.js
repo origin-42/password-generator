@@ -206,7 +206,6 @@ const generatePassword = () => {
     // Alert user to options selected.
     alert(`Characters selected: ${createPromts.numberOfCharsGiven}\n ${createPromts.lowercaseConfirmation}\n ${createPromts.uppercaseConfirmation}\n ${createPromts.numericConfirmation}\n ${createPromts.specialConfirmation}`);
   }
-  console.log(passWordArray);
   return passWordArray;
 }
 
