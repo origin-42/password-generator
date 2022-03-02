@@ -5,22 +5,24 @@ const createPromts = {
   numberOfCharsGiven: 0,
   // Feedback for user selection
   numberConfirmation: `${this.numberOfCharsGiven} + "characters"`,
+  numRange: /\b([8-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])\b/g,
   requestNumOfChars: function() {
     let numOfChars = prompt("How many characters should there be? Between 8 and 128");
     this.numberOfCharsGiven = numOfChars;
     // Cancel condition
     if (this.numberOfCharsGiven === null) {
       return;
-    }
-    if (this.numberOfCharsGiven < 8 || this.numberOfCharsGiven > 128) {
+    } 
+    // Incorrect value condition - Check number range and special characters
+    if (!this.numberOfCharsGiven.match(this.numRange) || this.numberOfCharsGiven.split("").filter(element => this.specialRange.includes(element)).length > 0) {
       do {
-        // Incorrect value condition
         this.numberOfCharsGiven = prompt("Please enter a number ranging from 8 to 128");
         // Cancel condition
         if (this.numberOfCharsGiven === null) {
           return;
         }
-      } while (this.numberOfCharsGiven < 8 || this.numberOfCharsGiven > 128);
+      // Incorrect value condition - Check number range and special characters
+      } while (!this.numberOfCharsGiven.match(this.numRange) || this.numberOfCharsGiven.split("").filter(element => this.specialRange.includes(element)).length > 0);
     }
   },
 
@@ -70,6 +72,7 @@ const createPromts = {
   confirmedSpecial: false,
   // Feedback for user selection
   specialConfirmation: undefined,
+  specialRange: " !\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~".split(""),
   requestSpecial: function () {
     let special = confirm("Include special characters? (#, $, %, etc)");
     if (special) {
@@ -114,7 +117,6 @@ const runPrompts = () => {
   // Save conditions to array.
   returnedCriteria.push(numberSelected % allowedCriteria);
   returnedCriteria.push((numberSelected - remainder) / allowedCriteria);
-
   return returnedCriteria;
 }
 
@@ -140,10 +142,9 @@ const generatePassword = () => {
 
   // Create variables to add to password.
   const availableNumbers = [];
-  for (let i = 8; i <= 128; i++) {
+  for (let i = 0; i <= 9; i++) {
     availableNumbers.push(i);
   }
-  const specialArry = " !\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~".split("");
   const charactersArray = "abcdefghijklmnopqrstuvwxyz".split("");
 
   // Randomise an input value
@@ -178,7 +179,7 @@ const generatePassword = () => {
 
     // Add numbers to string if permitted. 
     const addNumericValues = (lowercaseSelected, uppercaseSelected, criteriaCheck, remainder, divisionAllowance) => {
-      if (lowercaseSelected === true && uppercaseSelected === true) {
+      if (lowercaseSelected === true || uppercaseSelected === true) {
         remainder = 0;
       }
       if (criteriaCheck === true) {
@@ -191,12 +192,12 @@ const generatePassword = () => {
 
     // Add special characters to string if permitted.
     const addSpecialCharacters = (lowercaseSelected, uppercaseSelected, numericSelected, criteriaCheck, remainder, divisionAllowance) => {
-      if (lowercaseSelected === true && uppercaseSelected === true && numericSelected === true) {
+      if (lowercaseSelected === true || uppercaseSelected === true || numericSelected === true) {
         remainder = 0;
       }
       if (criteriaCheck === true) {
         for (let i = 0; i < divisionAllowance + remainder; i++) {
-          passWordArray.push(specialArry[createRandomIndex(specialArry.length)]);
+          passWordArray.push(createPromts.specialRange[createRandomIndex(createPromts.specialRange.length)]);
         }
       }
     }
@@ -205,7 +206,7 @@ const generatePassword = () => {
     // Alert user to options selected.
     alert(`Characters selected: ${createPromts.numberOfCharsGiven}\n ${createPromts.lowercaseConfirmation}\n ${createPromts.uppercaseConfirmation}\n ${createPromts.numericConfirmation}\n ${createPromts.specialConfirmation}`);
   }
-
+  console.log(passWordArray);
   return passWordArray;
 }
 
